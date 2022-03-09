@@ -3,14 +3,14 @@ package test.mine.sweeper;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Minesweeper {
+public class Game {
     Board board;
 
-    public Minesweeper(int length, int width,int numOfMines) {
+    public Game(int length, int width,int numOfMines) {
 
         board = new Board(length, width, numOfMines);
 
-        help();
+        option();
 
         System.out.println("Generating Board");
 
@@ -40,24 +40,24 @@ public class Minesweeper {
         System.out.print("Number Of Mines: ");
         int numOfMines = scan.nextInt();
 
-        new Minesweeper(length,width,numOfMines);
+        new Game(length,width,numOfMines);
     }
 
 
-    public void help() {
+    public void option() {
         System.out.println();
         System.out.println("Commands:");
-        System.out.println(" \"choose\" to choose a tile");
-        System.out.println(" \"flag\"   to set flag");
-        System.out.println(" \"restart\"to start a new game");
-        System.out.println(" \"quit\"   to quit the game");
+        System.out.println(" \"choose\"  - choose a tile");
+        System.out.println(" \"flag\"    - set flag");
+        System.out.println(" \"restart\" - start a new game");
+        System.out.println(" \"quit\"    - quit the game");
         System.out.println();
     }
 
     void userInput() {
         Scanner scan = new Scanner(System.in);
 
-        System.out.print("$ ");
+        System.out.print("= ");
         String userInput;
 
         userInput = scan.nextLine();
@@ -121,12 +121,15 @@ public class Minesweeper {
 
     void choose(int row, int column) {
         Cell cell = board.getBoard()[row][column];
+
         if (cell.isMine()) {
             board.printBoard();
             System.out.println("Lose");
+
         } else if (cell.hasValue()) {
             cell.show();
             board.printBoard();
+
         } else if (!cell.hasValue()) {
             reveal(cell, new ArrayList<>(), new ArrayList<>(),0);
         }
