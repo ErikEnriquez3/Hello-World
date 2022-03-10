@@ -5,9 +5,12 @@ import java.util.Arrays;
 
 public class Cell {
 
+                                        // the Cells Position
+
     private final int xPos;
     private final int yPos;
 
+                                        // the Cells Properties
     private final boolean isMine;
     private boolean isFlagged;
     private boolean isShown;
@@ -15,8 +18,10 @@ public class Cell {
     private String symbol;
     private String value;
 
-    private Cell[][] myBoard;
-    private ArrayList<Cell> surroundingCells;
+                                        // Cell surroundings
+
+    private final Cell[][] myBoard;
+    private final ArrayList<Cell> surroundingCells = new ArrayList<>();
 
     public Cell(int x, int y, boolean isMine, Cell[][] board) {
 
@@ -25,27 +30,18 @@ public class Cell {
         this.isShown = false;
 
         this.myBoard = board;
-        surroundingCells = new ArrayList<>();
 
         this.xPos = x;
         this.yPos = y;
-        symbol = "█";
+        symbol = "*";
 
         if (this.isMine) {
-            value = "☼";
+            value = "#";
         }
     }
 
     public boolean isMine() {
         return isMine;
-    }
-
-    public int getxPos() {
-        return xPos;
-    }
-
-    public int getyPos() {
-        return yPos;
     }
 
     public String getSymbol() {
@@ -54,7 +50,7 @@ public class Cell {
 
     public void show() {
         symbol = value;
-        isShown = false;
+        isShown = true;
     }
 
     public boolean isShown() {
@@ -63,7 +59,7 @@ public class Cell {
 
     public boolean hasValue() {
 
-        if (isMine == true) return false;
+        if (isMine) return false;
 
         return Integer.parseInt(value) > 0;
     }
@@ -87,7 +83,6 @@ public class Cell {
                     try {
                         surroundingCells.add(myBoard[i][j]);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        continue;
                     }
                 }
             }
@@ -98,13 +93,11 @@ public class Cell {
         return value;
     }
 
-
     public void setValue() {
 
         if (isMine) {
             return;
         }
-
 
         if (Arrays.asList(myBoard).contains(null)) {
             return;
@@ -134,22 +127,13 @@ public class Cell {
             symbol = "F";
         } else {
             if (isMine) {
-                symbol = "☼";
+                symbol = "#";
             } else if (isShown) {
                 symbol = value;
             } else {
-                symbol = "█";
+                symbol = "*";
             }
         }
-    }
-
-    public boolean equals(Object obj) {
-        Cell cell = (Cell) obj;
-        return cell.getyPos() == yPos && cell.getxPos() == xPos && cell.isMine() == isMine && cell.getValue().equals(value);
-    }
-
-    public String toString() {
-        return "X: " + xPos + " Y: " + yPos + " Value:" + value;
     }
 
 }

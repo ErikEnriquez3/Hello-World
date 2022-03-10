@@ -26,9 +26,11 @@ public class Game {
 
     public static void main(String[] args) {
 
-
         System.out.println();
-        System.out.println("§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
+        System.out.println("###############");
+        System.out.println("# MINESWEEPER #");
+        System.out.println("###############");
+        System.out.println("Enter Values");
         System.out.println();
         Scanner scan = new Scanner(System.in);
         System.out.print("Input Length: ");
@@ -37,7 +39,7 @@ public class Game {
         System.out.print("Input Width: ");
         int width =  scan.nextInt();
 
-        System.out.print("Number Of Mines: ");
+        System.out.print("Input no. Of Mines: ");
         int numOfMines = scan.nextInt();
 
         new Game(length,width,numOfMines);
@@ -46,18 +48,18 @@ public class Game {
 
     public void option() {
         System.out.println();
-        System.out.println("Commands:");
-        System.out.println(" \"choose\"  - choose a tile");
-        System.out.println(" \"flag\"    - set flag");
-        System.out.println(" \"restart\" - start a new game");
-        System.out.println(" \"quit\"    - quit the game");
+        System.out.println("Options:");
+        System.out.println("      \"choose\" - to choose a cell");
+        System.out.println("      \"flag\"   - to flag a cell");
+        System.out.println("      \"restart\"- to start a new game");
+        System.out.println("      \"quit\"   - to quit the game");
         System.out.println();
     }
 
     void userInput() {
         Scanner scan = new Scanner(System.in);
 
-        System.out.print("= ");
+        System.out.print("Option: ");
         String userInput;
 
         userInput = scan.nextLine();
@@ -68,6 +70,7 @@ public class Game {
 
         switch (userInput)
         {
+
             case "choose":
 
                 System.out.print("Row: ");
@@ -121,78 +124,28 @@ public class Game {
 
     void choose(int row, int column) {
         Cell cell = board.getBoard()[row][column];
-
         if (cell.isMine()) {
-            board.printBoard();
-            System.out.println("Lose");
-
+            System.out.println("You lose! You chose a mine.");
         } else if (cell.hasValue()) {
             cell.show();
-            board.printBoard();
-
         } else if (!cell.hasValue()) {
-            reveal(cell, new ArrayList<>(), new ArrayList<>(),0);
+            reveal(cell, new ArrayList<>(),0);
         }
     }
 
-
-    public void reveal(Cell cell, ArrayList<Cell> queue, ArrayList<Cell> processed, Integer i) {
-
-        i++;
+    public void reveal(Cell cell, ArrayList<Cell> processed,int i) {
 
         cell.show();
-
-        if (queue.isEmpty()) {
-            ArrayList<Cell> surroundingCells = cell.getSurroundingCells();
-            for (Cell cell2 : surroundingCells) {
-                if (!cell2.hasValue() && !cell.isMine()) {
-                    queue.add(cell2);
-                } else if (cell2.hasValue()) {
-                    cell2.show();
-                }
-            }
-
-            if (queue.isEmpty()) {
-
-            } else {
-                reveal(queue.get(0), queue, processed, i);
-            }
-        } else {
-            for (Cell cell2 : cell.getSurroundingCells()) {
-                if (queue.contains(cell2)) {
-
-                } else if (processed.contains(cell2)) {
-
-                } else if (!cell2.hasValue() && !cell2.isMine()) {
-                    queue.add(cell2);
-                } else if (cell2.hasValue()) {
-                    cell2.show();
-                } else if (cell2.isShown()) {
-
-                } else if (cell2.isMine()) {
-
-                }
-            }
-
-            processed.add(cell);
-            queue.remove(cell);
-
-            if (queue.isEmpty()) {
-                return;
-            } else {
-                reveal(queue.get(0), queue, processed,i);
-            }
-        }
-
-        board.printBoard();
         System.out.println(i);
     }
+
     void flag(int row, int column) {
 
         Cell cell = board.getBoard()[row][column];
         cell.setFlagged(!cell.isFlagged());
 
     }
+
     void restart(int length, int width, int numOfMines) {
         System.out.println("Generating new Board");
         board = new Board(length, width, numOfMines);
